@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
                 ]);
                 SendRequestJob::dispatch($domain, $curlDetail);
             }
-        })->everyTwoMinutes();
+        })->everyMinute();
     }
 
     /**
