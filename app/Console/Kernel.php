@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
             // fwrite($myfile, $txt);
             // fclose($myfile);
 
-            $domains = Domain::all();
+            $domains = Domain::where('is_active', true)->get();
             foreach ($domains as $domain) {
                 $curlDetail = CurlDetail::create([
                     'domain_id' => $domain->id,
