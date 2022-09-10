@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
 
 class SendRequestJob implements ShouldQueue
 {
@@ -69,6 +70,32 @@ class SendRequestJob implements ShouldQueue
             //     'updated_at' => now(),
             // ]);
             $this->curlDetail->status = 'offline';
+
+            // start send notification to bonnier slack. add new websites for notification here:
+            $bonnierDomains = [
+                'iform.dk',
+                'militarhistoria.se',
+                'admin.iform.dk',
+                'iform.nu',
+                'illvid.dk',
+                'goerdetselv.dk',
+                'site-manager.bonnier.cloud/admin/login',
+                'translation-manager.bonnier.cloud/admin/login',
+                'staging.cache-service.bonnier.cloud',
+                'staging2.iform.dk',
+                'admin-staging.illvid.dk',
+            ];
+            if( in_array( $this->domain->name, $bonnierDomains)){
+                Http::withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ])->post('https://hooks.slack.com/services/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', [
+                    'text' => $this->domain->name . ' is down.',
+                ]);
+            }
+            // end send notification to bonnier slack
         }
         $diff = now()->diffInMilliseconds($time);
         $this->curlDetail->response_time_milliseconds = $diff;
