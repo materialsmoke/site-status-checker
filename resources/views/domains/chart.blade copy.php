@@ -10,8 +10,12 @@
 </div>
 
 
+<script>
+let domainId = "{{$domain->id}}";
+</script>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 <script type="text/javascript">
 google.charts.load("current", {packages:["corechart"]});
 google.charts.setOnLoadCallback(drawChart);
@@ -61,8 +65,8 @@ function drawChart() {
             let donutChartData = google.visualization.arrayToDataTable([
                 ['Status', 'Online or offline'],
                 ['Online', online],
-                ['Error', offline],
-                ['Offline', not_sent],
+                ['Offline', offline + +not_sent],
+                // ['Offline', not_sent],
                 ['Testing', start],
             ]);
 
@@ -72,8 +76,8 @@ function drawChart() {
                 slices: {
                     0: { color: '#3366CC' },
                     1: { color: '#800000' },
-                    2: { color: '#DC3912' },
-                    3: { color: '#000000' }
+                    // 2: { color: '#DC3912' },
+                    2: { color: '#000000' }
                 }
             };
 
@@ -91,9 +95,7 @@ function drawChart() {
 }
 </script>
 
-<script>
-let domainId = "{{$domain->id}}";
-</script>
+
 
 <div id="donutchart" style="width: 900px; height: 500px;"></div>
 
@@ -114,6 +116,10 @@ function drawBasic() {
 let barChartHandler = ()=>{
 
     let minutes = document.getElementById('minutes');
+
+    let sumResponseTime = 0;
+    let countPositiveResponseTime = 0;
+
     console.log('minutes2', minutes.value);
     fetch('/curl-details/' + domainId, {
         method: "post",
@@ -140,21 +146,25 @@ let barChartHandler = ()=>{
             ['Element', 'Status', { role: 'style' }]
         ];
         
-
-        data.forEach(item => {
+        
+        data.reverse().forEach(item => {
+            if(item.response_time_milliseconds > 0){
+                countPositiveResponseTime++;
+                sumResponseTime += item.response_time_milliseconds;
+            }
             let state;
             let color = "";
             if(item.status === "online"){
                 online++;
-                state = 1;
+                state = +(item.response_time_milliseconds/1000).toFixed(2);
                 color = "#3366CC"
             }else if(item.status === "offline"){
                 offline++;
-                state = -1;
+                state = -2;
                 color = "#800000"
             }else if(item.status === "not_sent"){
                 not_sent++;
-                state = -0.5;
+                state = -1.5;
                 color = "#DC3912"
             }else{//if(item.status === "start")
                 start++;
@@ -182,7 +192,7 @@ let barChartHandler = ()=>{
         );
 
         let options = {
-            title: 'Status',
+            title: `Average response time: ${((sumResponseTime / countPositiveResponseTime) / 1000).toFixed(2)} seconds`,
             hAxis: {
                 title: 'Time',
                 format: 'h:mm a',
@@ -197,7 +207,7 @@ let barChartHandler = ()=>{
             
         };
 
-        let barChart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        let barChart = new google.visualization.BarChart(document.getElementById('BarChart_chart_div'));
 
         barChart.draw(barChartData, options);
 
@@ -215,7 +225,7 @@ barChartHandler();
 }
 </script>
 
-<div style="display: fixed">
+<div >
 
-<div id="chart_div" ></div>
+<div id="BarChart_chart_div"  style="width: 500px; height: 2500px;" ></div>
 </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCurlDetailRequest;
 use App\Http\Requests\UpdateCurlDetailRequest;
 use App\Models\CurlDetail;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Support\Facades\Log;
 
 class CurlDetailController extends Controller
@@ -16,15 +18,25 @@ class CurlDetailController extends Controller
      */
     public function index($domainId)
     {
-        $minutes = request()->input('minutes');
-        Log::info('sdjfasjdfjaldskfkjsadfjkdsfkjl ' . $minutes);
+        $startDate = request()->input('startDate');
+        $endDate = request()->input('endDate');
+
+        $startDate = new Carbon(new DateTime($startDate));
+        $endDate = new Carbon(new DateTime($endDate));
+
+
+        // $minutes = request()->input('minutes');
+        // Log::info('sdjfasjdfjaldskfkjsadfjkdsfkjl ' . $minutes);
         // print_r($minutes);
         
         // if(! isset($minutes)){
         //     $minutes = 1440;
         // }
 
-        $curlDetails = CurlDetail::where('domain_id', $domainId)->where('created_at', '>', now()->subMinutes($minutes))->get();
+        $curlDetails = CurlDetail::where('domain_id', $domainId)
+            ->where('created_at', '>', $startDate->addDay()->toDateString())
+            ->where('created_at', '<', $endDate->addDay()->toDateString())
+            ->get();
 
         return $curlDetails;
     }
