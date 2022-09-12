@@ -86,6 +86,7 @@ class SendRequestJob implements ShouldQueue
                 'admin-staging.illvid.dk',
             ];
             if( in_array( $this->domain->name, $bonnierDomains)){
+                Log::warning($this->domain->name . 'if');
                 Http::withHeaders([
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -94,6 +95,8 @@ class SendRequestJob implements ShouldQueue
                 ])->post('https://hooks.slack.com/services/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', [
                     'text' => $this->domain->name . ' is down.',
                 ]);
+            }else{
+                Log::warning($this->domain->name . 'else');
             }
             // end send notification to bonnier slack
         }
