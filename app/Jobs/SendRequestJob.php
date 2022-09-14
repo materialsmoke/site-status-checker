@@ -96,7 +96,7 @@ class SendRequestJob implements ShouldQueue
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
-                ])->post('https://hooks.slack.com/services/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', [
+                ])->post('https://hooks.slack.com/services/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', [
                     'text' => $this->domain->name . ' is online.',
                 ]);
                 Log::warning($r->status());
@@ -143,7 +143,7 @@ class SendRequestJob implements ShouldQueue
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
-                ])->post('https://hooks.slack.com/services/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', [
+                ])->post('https://hooks.slack.com/services/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', [
                     'text' => $this->domain->name . ' is down.',
                 ]);
                 Log::warning($r->status());
