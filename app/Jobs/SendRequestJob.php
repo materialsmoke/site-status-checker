@@ -62,6 +62,57 @@ class SendRequestJob implements ShouldQueue
             //     'updated_at' => now(),
             // ]);
             $this->curlDetail->status = 'online';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            $bonnierDomains = [
+                'iform.dk',
+                'militarhistoria.se',
+                'admin.iform.dk',
+                'iform.nu',
+                'illvid.dk',
+                'goerdetselv.dk',
+                'site-manager.bonnier.cloud/admin/login',
+                'translation-manager.bonnier.cloud/admin/login',
+                'staging.cache-service.bonnier.cloud',
+                'staging2.iform.dk',
+                'admin-staging.illvid.dk',
+            ];
+            if( in_array( $this->domain->name, $bonnierDomains)){
+                Log::warning($this->domain->name . ' is online (bonnier)');
+                $r = Http::withHeaders([
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ])->post('https://hooks.slack.com/services/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', [
+                    'text' => $this->domain->name . ' is online.',
+                ]);
+                Log::warning($r->status());
+            }
+
+
+
+
+
+
+
+
+
+
+
+
         } else {
             // CurlDetail::create([
             //     'domain_id' => $this->domain->id,
@@ -86,18 +137,18 @@ class SendRequestJob implements ShouldQueue
                 'admin-staging.illvid.dk',
             ];
             if( in_array( $this->domain->name, $bonnierDomains)){
-                Log::warning($this->domain->name . 'if');
+                Log::warning($this->domain->name . ' is down (bonnier)');
                 $r = Http::withHeaders([
                     'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
-                ])->post('https://hooks.slack.com/services/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', [
+                ])->post('https://hooks.slack.com/services/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', [
                     'text' => $this->domain->name . ' is down.',
                 ]);
                 Log::warning($r->status());
             }else{
-                Log::warning($this->domain->name . 'else');
+                Log::warning($this->domain->name . ' is down');
             }
             // end send notification to bonnier slack
         }
