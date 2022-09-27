@@ -21,18 +21,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->call(function () {
-        //     $domains = Domain::where('is_active', true)->where('type', '=', 'response-check')->get();
-        //     foreach ($domains as $domain) {
-        //         $curlDetail = CurlDetail::create([
-        //             'domain_id' => $domain->id,
-        //             'status' => 'start',
-        //             'created_at' => now(),
-        //             'updated_at' => now(),
-        //         ]);
-        //         SendRequestJob::dispatch($domain, $curlDetail);
-        //     }
-        // })->everyMinute();
+        $schedule->call(function () {
+            $domains = Domain::where('is_active', true)->where('type', '=', 'response-check')->get();
+            foreach ($domains as $domain) {
+                $curlDetail = CurlDetail::create([
+                    'domain_id' => $domain->id,
+                    'status' => 'start',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                SendRequestJob::dispatch($domain, $curlDetail);
+            }
+        })->everyMinute();
 
         $schedule->call(function(){
             $domains = Domain::where('is_active', true)->where('type', '=', 'sitemap-check')->get();
@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
                 ]);
                 CheckSitemapJob::dispatch($domain, $checkSitemapDomain);
             }
-        })->everyMinute();//->everyFourHours();
+        })->everyFourHours();//->everyMinute();
     }
 
     /**
