@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
+use App\Jobs\CheckSitemapJob;
 use App\Jobs\SendRequestJob;
+use App\Models\CheckSitemapDomain;
 use App\Models\CurlDetail;
 use App\Models\Domain;
 use Illuminate\Console\Scheduling\Schedule;
@@ -19,23 +21,30 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            // $myfile = fopen("testfilekdsjfjdsfkj.txt", "a");
-            // $txt = now() . "\n";
-            // fwrite($myfile, $txt);
-            // fclose($myfile);
+        // $schedule->call(function () {
+        //     $domains = Domain::where('is_active', true)->where('type', '=', 'response-check')->get();
+        //     foreach ($domains as $domain) {
+        //         $curlDetail = CurlDetail::create([
+        //             'domain_id' => $domain->id,
+        //             'status' => 'start',
+        //             'created_at' => now(),
+        //             'updated_at' => now(),
+        //         ]);
+        //         SendRequestJob::dispatch($domain, $curlDetail);
+        //     }
+        // })->everyMinute();
 
-            $domains = Domain::where('is_active', true)->get();
-            foreach ($domains as $domain) {
-                $curlDetail = CurlDetail::create([
+        $schedule->call(function(){
+            $domains = Domain::where('is_active', true)->where('type', '=', 'sitemap-check')->get();
+            foreach($domains as $domain){
+                $checkSitemapDomain = CheckSitemapDomain::create([
                     'domain_id' => $domain->id,
-                    'status' => 'start',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
-                SendRequestJob::dispatch($domain, $curlDetail);
+                CheckSitemapJob::dispatch($domain, $checkSitemapDomain);
             }
-        })->everyMinute();
+        })->everyMinute();//->everyFourHours();
     }
 
     /**

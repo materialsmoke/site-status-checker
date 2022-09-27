@@ -11,6 +11,10 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form action="/domains" method="post">
                         <input type="text" name="add-domain" style="border 1px blue solid">
+                        <select name="type" id="">
+                            <option value="response-check">response-check</option>
+                            <option value="sitemap-check">sitemap-check</option>
+                        </select>
                         <input type="submit" value="ADD" style="border 1px blue solid">
                     </form>
                 </div>

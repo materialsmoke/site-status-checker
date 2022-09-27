@@ -51,6 +51,7 @@ class DomainController extends Controller
         if(!$domain){
             $domain = Domain::create([
                 'name' => $domainStr,
+                'type' => $request->input('type'),
             ]); 
         }
 
@@ -69,8 +70,6 @@ class DomainController extends Controller
      */
     public function show(Domain $domain)
     {
-        // $curlDetails = CurlDetail::where('domain_id', $domain->id)->where('created_a');
-
         return view('domains.show2', compact('domain'));
     }
 

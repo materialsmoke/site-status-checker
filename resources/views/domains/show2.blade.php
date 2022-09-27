@@ -31,6 +31,12 @@
         </div>
     </div> --}}
 
-    @include('domains.chart', [$domain])
+    @if($domain->type === 'response-check')
+        @include('domains.chart', [$domain])
+    @else
+        @include('domains.sitemap_check', [$domain])
+    @endif
+    
+
     
 </x-app-layout>

@@ -14,16 +14,16 @@
     <div>
         <div>How many days ago:</div>
         <br>
-        <span id="span1" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">1</span>
-        <span id="span2" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">2</span>
-        <span id="span3" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">3</span>
-        <span id="span4" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">4</span>
-        <span id="span5" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">5</span>
-        <span id="span6" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">6</span>
-        <span id="span7" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">7</span>
-        <span id="span8" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">8</span>
-        <span id="span9" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">9</span>
-        <span id="span10" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">10</span>
+        <span id="span1" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">0</span>
+        <span id="span2" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">1</span>
+        <span id="span3" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">2</span>
+        <span id="span4" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">3</span>
+        <span id="span5" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">4</span>
+        <span id="span6" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">5</span>
+        <span id="span7" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">6</span>
+        <span id="span8" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">7</span>
+        <span id="span9" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">8</span>
+        <span id="span10" style="padding: 10px; margin: 3px; background-color:rgb(164, 164, 255);text-align:center">9</span>
     </div>
 </div>
 
@@ -284,6 +284,5 @@
 </script>
 
 <div >
-
-    <div id="BarChart_chart_div"  style="width: 500px; height: 2500px;" ></div>
+    <div id="BarChart_chart_div"  style="width: 500px; height: 4000px;" ></div>
 </div>
