@@ -24,7 +24,7 @@ class CheckSitemapDomainController extends Controller
 
     public function show($domainId)
     {
-        $checkSitemapDomain = CheckSitemapDomain::where('domain_id', $domainId)->orderBy('created_at', 'desc')->limit(100)->get(['id', 'created_at', 'status', 'is_healthy']);
+        $checkSitemapDomain = CheckSitemapDomain::where('domain_id', $domainId)->orderBy('created_at', 'desc')->limit(200)->get(['id', 'created_at', 'status', 'is_healthy']);
 
         if($checkSitemapDomain){
         

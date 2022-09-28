@@ -35,16 +35,14 @@ class Kernel extends ConsoleKernel
         })->everyMinute();
 
         $schedule->call(function(){
-            $domains = Domain::where('is_active', true)->where('type', '=', 'sitemap-check')->get();
-            foreach($domains as $domain){
-                $checkSitemapDomain = CheckSitemapDomain::create([
-                    'domain_id' => $domain->id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-                CheckSitemapJob::dispatch($domain, $checkSitemapDomain);
-            }
-        })->everyFourHours();//->everyMinute();
+            $domain = Domain::where('is_active', true)->where('type', '=', 'sitemap-check')->inRandomOrder()->first();
+            $checkSitemapDomain = CheckSitemapDomain::create([
+                'domain_id' => $domain->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            CheckSitemapJob::dispatch($domain, $checkSitemapDomain);
+        })->everyTenMinutes();//->everyMinute();
     }
 
     /**

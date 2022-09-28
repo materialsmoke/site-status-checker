@@ -32,6 +32,7 @@ Route::post('/curl-details/{domainId}', [CurlDetailController::class, 'index']);
 
 
 Route::get('tt', function(){
+    dd(Domain::where('is_active', true)->where('type', '=', 'sitemap-check')->inRandomOrder()->first());
     $c = CheckSitemapDomain::orderBy('created_at', 'desc')->first();
     dd(json_decode($c->differences_content));
 });
