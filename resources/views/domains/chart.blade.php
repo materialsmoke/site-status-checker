@@ -67,6 +67,14 @@
         var dateEnd = ('0'+ (myDate.getMonth()+1)).slice(-2)  + '/' + ('0'+ myDate.getDate()).slice(-2) + '/' + myDate.getFullYear();
         var startDateV = $( "#startDate" ).datepicker().val(dateStart).val();
         var endDateV = $( "#endDate" ).datepicker().val(dateEnd).val();
+        
+        let submitBtn = document.getElementById('submit');
+        submitBtn.addEventListener('click', () => {
+            startDateV = $( "#startDate" ).datepicker().val();
+            endDateV = $( "#endDate" ).datepicker().val();
+            drawChart();
+            drawBasic();
+        });
 
         const selectDayHandler = (daysAgo) =>{
             console.log(daysAgo)
@@ -77,8 +85,8 @@
 
             drawChart();
             drawBasic();
-
         }
+
         document.getElementById('span1').addEventListener('click', ()=>selectDayHandler(1));
         document.getElementById('span2').addEventListener('click', ()=>selectDayHandler(2));
         document.getElementById('span3').addEventListener('click', ()=>selectDayHandler(3));
@@ -90,7 +98,7 @@
         document.getElementById('span9').addEventListener('click', ()=>selectDayHandler(9));
         document.getElementById('span10').addEventListener('click', ()=>selectDayHandler(10));
 
-
+        
 
         console.log(startDateV, 's');
         console.log(endDateV, 's');
@@ -262,8 +270,7 @@
                     let barChart = new google.visualization.BarChart(document.getElementById('BarChart_chart_div'));
                     barChart.draw(barChartData, options);
                 });
-                let submitBtn = document.getElementById('submit');
-                submitBtn.addEventListener('click', barChartHandler);
+
             };
             barChartHandler();
         }
