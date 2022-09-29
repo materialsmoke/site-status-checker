@@ -45,6 +45,7 @@ class SendRequestJob implements ShouldQueue
         }catch(\Exception $e){
             $this->curlDetail->status = 'not_sent';
             $this->curlDetail->save();
+            $this->sendNotification('handled by exception');
             return;
         }
 
@@ -52,38 +53,40 @@ class SendRequestJob implements ShouldQueue
             $this->curlDetail->status = 'online';
         } else {
             $this->curlDetail->status = 'offline';
-
-            // start send notification to bonnier slack. add new websites for notification here:
-            $bonnierDomains = [
-                'iform.dk',
-                'militarhistoria.se',
-                'admin.iform.dk',
-                'iform.nu',
-                'illvid.dk',
-                'goerdetselv.dk',
-                'site-manager.bonnier.cloud/admin/login',
-                'translation-manager.bonnier.cloud/admin/login',
-                'staging.cache-service.bonnier.cloud',
-                'staging2.iform.dk',
-                'admin-staging.illvid.dk',
-                'iform.nu/trening/fitness',
-            ];
-            if( in_array( $this->domain->name, $bonnierDomains)){
-                $dt = Carbon::now();
-                $r = Http::withHeaders([
-                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
-                ])->post(env('SLACK_NOTIFICATION_LINK'), [
-                    'text' => $this->domain->name . ' is down. ' . $dt->toDayDateTimeString(),
-                ]);
-                
-            }
-            // end send notification to bonnier slack
+            $this->sendNotification('is down');
         }
         $diff = now()->diffInMilliseconds($time);
         $this->curlDetail->response_time_milliseconds = $diff;
         $this->curlDetail->save();
+    }
+
+    // send notification to bonnier slack. add new websites for notification here:
+    private function sendNotification($message)
+    {
+        $bonnierDomains = [
+            'iform.dk',
+            'militarhistoria.se',
+            'admin.iform.dk',
+            'iform.nu',
+            'illvid.dk',
+            'goerdetselv.dk',
+            'site-manager.bonnier.cloud/admin/login',
+            'translation-manager.bonnier.cloud/admin/login',
+            'staging.cache-service.bonnier.cloud',
+            'staging2.iform.dk',
+            'admin-staging.illvid.dk',
+            'iform.nu/trening/fitness',
+        ];
+        if( in_array( $this->domain->name, $bonnierDomains)){
+            $dt = Carbon::now();
+            Http::withHeaders([
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
+                'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post(env('SLACK_NOTIFICATION_LINK'), [
+                'text' => $this->domain->name . '=> ' . $message . '. =>' . $dt->toDayDateTimeString(),
+            ]);
+        }
     }
 }
