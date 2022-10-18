@@ -46,7 +46,7 @@ class SendRequestJob implements ShouldQueue
         }catch(\Exception $e){
             $this->curlDetail->status = 'not_sent';
             $this->curlDetail->save();
-            $this->sendNotification('handled by exception');
+            $this->sendNotification('timeout');
             return;
         }
 
@@ -86,7 +86,7 @@ class SendRequestJob implements ShouldQueue
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ])->post(env('SLACK_NOTIFICATION_LINK'), [
-                'text' => $this->domain->name . '=> ' . $message . '. =>' . $dt->toDayDateTimeString(),
+                'text' => $this->domain->name . ' => ' . $message . '. =>' . $dt->toDayDateTimeString(),
             ]);
         }
     }
