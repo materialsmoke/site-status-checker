@@ -32,17 +32,17 @@ class Kernel extends ConsoleKernel
                 ]);
                 SendRequestJob::dispatch($domain, $curlDetail);
             }
-        })->everyMinute();
+        })->everyTwoHours();
 
-        $schedule->call(function(){
-            $domain = Domain::where('is_active', true)->where('type', '=', 'sitemap-check')->inRandomOrder()->first();
-            $checkSitemapDomain = CheckSitemapDomain::create([
-                'domain_id' => $domain->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            CheckSitemapJob::dispatch($domain, $checkSitemapDomain);
-        })->everyTenMinutes();//->everyMinute();
+       // $schedule->call(function(){
+       //     $domain = Domain::where('is_active', true)->where('type', '=', 'sitemap-check')->inRandomOrder()->first();
+       //     $checkSitemapDomain = CheckSitemapDomain::create([
+       //         'domain_id' => $domain->id,
+       //         'created_at' => now(),
+       //         'updated_at' => now(),
+       //     ]);
+       //     CheckSitemapJob::dispatch($domain, $checkSitemapDomain);
+       // })->everyTenMinutes();//->everyMinute();
     }
 
     /**
